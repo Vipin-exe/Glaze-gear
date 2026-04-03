@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glaze & Gear | Premium Gifts & Artisanal Gear</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burgundy: #98202E;
+            --white: #F9EAEA;
+            --soft-accent: #D09399;
+            --gloss-highlight: rgba(255, 255, 255, 0.4);
+            --gloss-shadow: rgba(0, 0, 0, 0.15);
+            --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--white);
+            color: var(--burgundy);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .quote-text {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glossy Texture Utility */
+        .glossy {
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 var(--gloss-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glossy::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--gloss-highlight) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .glossy:hover::before {
+            transform: translate(10%, 10%);
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(249, 234, 234, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(152, 32, 46, 0.1);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 5%;
+            background: rgba(152, 32, 46, 0.98);
+            color: var(--white);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .nav-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            transition: var(--transition);
+        }
+
+        header.scrolled .nav-logo {
+            filter: brightness(0) invert(1);
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            color: var(--burgundy);
+            transition: var(--transition);
+        }
+
+        header.scrolled .logo-text {
+            color: var(--white);
+        }
+
+        header.scrolled .nav-logo path {
+            fill: var(--white);
+        }
+
+        /* Desktop Nav */
+        nav.desktop-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav.desktop-nav a {
+            text-decoration: none;
+            color: var(--burgundy);
+            margin-left: 2.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav.desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--burgundy);
+            transition: var(--transition);
+        }
+
+        nav.desktop-nav a:hover::after {
+            width: 100%;
+        }
+
+        header.scrolled nav.desktop-nav a {
+            color: var(--white);
+        }
+
+        header.scrolled nav.desktop-nav a::after {
+            background: var(--white);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1002; /* Higher than mobile-nav */
+            padding: 10px;
+            position: relative; /* Ensure z-index works */
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: var(--burgundy);
+            transition: var(--transition);
+        }
+
+        header.scrolled .mobile-menu-toggle span {
+            background: var(--white);
+        }
+
+        /* Mobile Nav Overlay */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--burgundy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1001; /* Lower than toggle */
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav a {
+            color: var(--white);
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .mobile-nav a:hover {
+            transform: scale(1.1);
+            opacity: 0.7;
+        }
+
+        /* Hamburger Animation */
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+            background: var(--white);
+        }
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+            background: var(--white);
+        }
+
+        /* Hero Section Responsive */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            background: radial-gradient(circle at center, #fff 0%, var(--white) 100%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 1.5rem;
+            letter-spacing: -3px;
+            background: linear-gradient(to bottom, var(--burgundy), #4a0e16);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 400;
+            color: var(--soft-accent);
+            animation: slideUp 1.2s ease-out;
+            max-width: 80%;
+        }
+
+        /* Quote Sections Responsive */
+        .section-quote {
+            padding: 12vh 8%;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: clamp(1.8rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            z-index: 2;
+        }
+
+        .quote-sub {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            opacity: 0.7;
+        }
+
+        .bg-burgundy {
+            background-color: var(--burgundy);
+            color: var(--white);
+        }
+
+        .bg-accent {
+            background-color: var(--soft-accent);
+            color: var(--burgundy);
+        }
+
+        /* Glossy Cards */
+        .product-grid {
+            padding: 10vh 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            background-color: #fff;
+        }
+
+        .product-card {
+            padding: 3rem;
+            border-radius: 20px;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(152, 32, 46, 0.15);
+        }
+
+        .product-img-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: crop;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+
+        .product-img-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .product-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--soft-accent);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-buy, .btn-cart {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-buy {
+            background: var(--burgundy);
+            color: var(--white);
+        }
+
+        .btn-cart {
+            background: transparent;
+            border: 1px solid var(--burgundy);
+            color: var(--burgundy);
+        }
+
+        .btn-buy:hover, .btn-cart:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        /* Slash Decoration */
+        .slash-decoration {
+            position: absolute;
+            font-size: 50vh;
+            font-weight: 900;
+            opacity: 0.03;
+            transform: rotate(-20deg);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        footer {
+            padding: 6rem 5%;
+            background-color: var(--burgundy);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--white);
+            margin: 0 1.5rem;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            nav.desktop-nav { display: none; }
+            .mobile-menu-toggle { display: flex; }
+            .product-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); padding: 8vh 5%; } /* Adjusted for 2x2 */
+            .product-card { padding: 1.5rem; } /* Smaller padding for 2x2 */
+            .product-img-container { height: 180px; } /* Smaller image height for 2x2 */
+            .product-card h3 { font-size: 1.2rem; } /* Smaller font for 2x2 */
+            .product-price { font-size: 0.9rem; } /* Smaller font for 2x2 */
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 1rem 5%; }
+            .logo-text { font-size: 1.2rem; }
+            .section-quote { padding: 10vh 10%; }
+            .product-card { padding: 2rem; }
+            .product-img-container { height: 250px; }
+            .slash-decoration { font-size: 30vh; }
+            footer { padding: 4rem 5%; }
+            .footer-logo { font-size: 2rem; }
+            .social-links a { margin: 0 0.8rem; font-size: 0.7rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { height: auto; padding-top: 120px; padding-bottom: 60px; min-height: 80vh; }
+            .hero h1 { font-size: 2.2rem; letter-spacing: -0.5px; margin-bottom: 1rem; }
+            .hero p { letter-spacing: 1px; font-size: 0.75rem; max-width: 90%; }
+            .hero a { padding: 1rem 2rem; font-size: 0.8rem; }
+            .quote-text { font-size: 1.4rem; }
+            .product-grid { gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); padding: 5vh 2%; } 
+            .product-card { padding: 0.8rem; border-radius: 12px; }
+            .product-img-container { height: 140px; margin-bottom: 1rem; }
+            .product-card h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+            .product-price { font-size: 0.85rem; margin-bottom: 1rem; }
+            .btn-buy, .btn-cart { padding: 0.6rem; font-size: 0.6rem; }
+            .section-quote { padding: 8vh 5%; min-height: 50vh; }
+            .slash-decoration { font-size: 20vh; }
+            .logo-text { font-size: 1.1rem; }
+            .nav-logo { width: 40px; height: 40px; }
+            .mobile-nav a { font-size: 1.5rem; }
+            footer { padding: 3rem 5%; }
+            .footer-logo { font-size: 1.8rem; }
+            .social-links a { margin: 0 0.5rem; font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="logo-container">
+            <!-- Brand Logo Image -->
+            <img src="g_g_logo_bg-removebg-preview.png" alt="Glaze & Gear Logo" class="nav-logo" style="border-radius: 50%;">
+            <div class="logo-text">Glaze & Gear</div>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="desktop-nav">
+            <a href="#shop">Shop</a>
+            <a href="#">About</a>
+            <a href="#">Journal</a>
+            <a href="#">Contact</a>
+        </nav>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-menu-toggle" id="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <nav class="mobile-nav" id="mobile-menu">
+        <a href="#shop">Shop</a>
+        <a href="#">About</a>
+        <a href="#">Journal</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <section class="hero">
+        <p>Gifts as special as your connection</p>
+        <h1>Glaze & Gear</h1>
+        <div style="margin-top: 2rem; max-width: 600px;">
+            <p style="text-transform: none; letter-spacing: normal; color: var(--burgundy); opacity: 0.8; font-weight: 500;">Handcrafted treasures curated to celebrate the people you love. Because every moment with them is a gift.</p>
+        </div>
+        <div style="margin-top: 3rem;">
+            <a href="#shop" style="text-decoration: none; padding: 1.2rem 3rem; background: var(--burgundy); color: white; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; border-radius: 4px; box-shadow: 0 10px 20px rgba(152, 32, 46, 0.2);">Find the Perfect Gift</a>
+        </div>
+    </section>
+
+    <!-- Shop by Occasion Section -->
+    <section style="padding: 10vh 5%; background: #fff; text-align: center;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 3rem;">Celebrate Every Occasion</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+            <div class="glossy" style="padding: 2rem; border-radius: 15px; cursor: pointer;">
+                <h3 style="font-size: 1.5rem;">Anniversaries</h3>
+                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Timeless pieces for lasting love.</p>
+            </div>
+            <div class="glossy" style="padding: 2rem; border-radius: 15px; cursor: pointer;">
+                <h3 style="font-size: 1.5rem;">Birthdays</h3>
+                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Unique finds for their special day.</p>
+            </div>
+            <div class="glossy" style="padding: 2rem; border-radius: 15px; cursor: pointer;">
+                <h3 style="font-size: 1.5rem;">Just Because</h3>
+                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Small tokens of big appreciation.</p>
+            </div>
+            <div class="glossy" style="padding: 2rem; border-radius: 15px; cursor: pointer;">
+                <h3 style="font-size: 1.5rem;">New Beginnings</h3>
+                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Celebrate life's biggest milestones.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-quote bg-burgundy">
+        <div class="slash-decoration" style="top: -10%; left: 10%;">/</div>
+        <div class="quote-text">"The best gifts aren't just things; they are the memories we unwrap together."</div>
+        <div class="quote-sub">Our Gifting Heart</div>
+    </section>
+
+    <section class="section-quote bg-accent">
+        <div class="slash-decoration" style="bottom: -10%; right: 10%;">/</div>
+        <div class="quote-text">"From hand-glazed ceramics to precision-crafted gear—made to be cherished forever."</div>
+        <div class="quote-sub">Crafted for Them</div>
+    </section>
+
+    <section class="product-grid" id="shop">
+        <div class="product-card glossy">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=500&auto=format&fit=crop" alt="Artisan Floral Vase" class="product-img">
+            </div>
+            <h3>Artisan Floral Vase</h3>
+            <p class="product-price">$145.00</p>
+            <div class="product-actions">
+                <button class="btn-buy">Buy Now</button>
+                <button class="btn-cart">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product-card glossy">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1524333865941-245026d02bcb?q=80&w=500&auto=format&fit=crop" alt="Leather Heritage Kit" class="product-img">
+            </div>
+            <h3>Leather Heritage Kit</h3>
+            <p class="product-price">$210.00</p>
+            <div class="product-actions">
+                <button class="btn-buy">Buy Now</button>
+                <button class="btn-cart">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product-card glossy">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1549465220-1d8c9d9c6703?q=80&w=500&auto=format&fit=crop" alt="Signature Couple's Box" class="product-img">
+            </div>
+            <h3>Signature Couple's Box</h3>
+            <p class="product-price">$185.00</p>
+            <div class="product-actions">
+                <button class="btn-buy">Buy Now</button>
+                <button class="btn-cart">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personalization Section -->
+    <section class="glossy" style="margin: 5vh 5%; padding: 8vh 5%; border-radius: 30px; text-align: center; background: rgba(152, 32, 46, 0.05);">
+        <h2 style="font-size: 2.2rem; margin-bottom: 1.5rem;">The Finishing Touch</h2>
+        <p style="max-width: 700px; margin: 0 auto 2rem; opacity: 0.8;">Every Glaze & Gear gift arrives in our signature premium packaging, complete with a hand-written note to make your loved one feel truly special.</p>
+        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <span style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">• Luxury Gift Wrap</span>
+            <span style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">• Custom Personal Note</span>
+            <span style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">• Worldwide Shipping</span>
+        </div>
+    </section>
+
+    <section class="section-quote" style="background: #fff;">
+        <div class="quote-text" style="color: var(--burgundy);">"Unwrap the magic of artisanal craft."</div>
+        <div class="quote-sub">Join the Circle</div>
+        <div style="margin-top: 3rem; width: 100%; max-width: 500px;">
+            <input type="email" placeholder="YOUR EMAIL ADDRESS" style="width: 100%; padding: 1.5rem; border: none; border-bottom: 2px solid var(--burgundy); font-family: 'Montserrat'; font-size: 0.9rem; text-align: center; outline: none; background: transparent;">
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">Glaze & Gear</div>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Pinterest</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+        </div>
+        <p style="margin-top: 4rem; font-size: 0.7rem; opacity: 0.3; letter-spacing: 2px;">&copy; 2026 GLAZE & GEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const body = document.body;
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                body.style.overflow = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>
