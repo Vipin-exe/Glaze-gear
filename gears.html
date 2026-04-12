@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gears | Glaze & Gear - The Modern Gentleman Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burgundy: #1a1a1a; 
+            --white: #F9EAEA;
+            --soft-accent: #888888;
+            --gloss-highlight: rgba(255, 255, 255, 0.1);
+            --gloss-shadow: rgba(0, 0, 0, 0.3);
+            --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a; 
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .quote-text {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 5%;
+            background: #ffffff; /* White background on scroll */
+            color: #000000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .nav-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            filter: invert(1); /* Static blue/teal color */
+            transition: var(--transition);
+        }
+
+        header.scrolled .nav-logo {
+            filter: invert(1); /* Keep logo blue on white background */
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            color: #ffffff;
+            transition: var(--transition);
+        }
+
+        header.scrolled .logo-text {
+            color: #000000; /* Black text on white scroll background */
+        }
+
+        /* Desktop Nav */
+        nav.desktop-nav a {
+            text-decoration: none;
+            color: #ffffff;
+            margin-left: 2.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        header.scrolled nav.desktop-nav a {
+            color: #000000; /* Black links on white scroll background */
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 2002;
+            padding: 10px;
+            position: relative;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: #ffffff;
+            transition: var(--transition);
+        }
+
+        header.scrolled .mobile-menu-toggle span {
+            background: #000000; /* Black hamburger lines on white scroll background */
+        }
+
+        /* Mobile Nav Overlay */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1500;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav a {
+            color: #ffffff;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1594731802111-0700452135c7?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 12vw, 9rem);
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 1.5rem;
+            letter-spacing: -3px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #888;
+            max-width: 800px;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            padding: 10vh 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            background-color: #0a0a0a;
+        }
+
+        .product-card {
+            padding: 0;
+            border-radius: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: #111;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .product-img-container {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+
+        .product-info-box {
+            padding: 2rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-price {
+            font-weight: 800;
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .btn-buy {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .btn-buy:hover {
+            background: #888;
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            padding: 6rem 5%;
+            background-color: #000;
+            color: #444;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: #222;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 992px) {
+            nav.desktop-nav { display: none; }
+            .mobile-menu-toggle { display: flex; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 1rem 5%; }
+            .hero { height: 60vh; }
+            .hero h1 { font-size: 3rem; }
+            .hero p { font-size: 0.75rem; letter-spacing: 2px; }
+            
+            .product-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                padding: 4vh 2%; 
+                gap: 1rem; 
+            }
+            .product-img-container { height: 160px; }
+            .product-info-box { padding: 1.2rem; }
+            .product-card h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+            .product-price { font-size: 1rem; margin-bottom: 1rem; }
+            .btn-buy { padding: 0.8rem; font-size: 0.65rem; letter-spacing: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="logo-container" onclick="window.location.href='index.html'">
+            <img src="g_g_logo_bg-removebg-preview.png" alt="Glaze & Gear Logo" class="nav-logo">
+            <div class="logo-text">Glaze & Gear</div>
+        </div>
+
+        <nav class="desktop-nav">
+            <a href="index.html#shop">Gifts</a>
+            <a href="gears.html" style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 5px;">Gears</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+
+        <div class="mobile-menu-toggle" id="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <nav class="mobile-nav" id="mobile-menu">
+        <a href="index.html">Glaze</a>
+        <a href="gears.html">Gears</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <section class="hero">
+        <p>The Ultimate Collection for Collectors</p>
+        <h1>GEARS</h1>
+        <p style="margin-top: 2rem; color: #fff; text-transform: none; letter-spacing: normal; font-weight: 500;">Premium scale models, rare collectibles, and precision-engineered gear for the automotive enthusiast.</p>
+    </section>
+
+    <section class="product-grid">
+        <!-- Product 1 -->
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1532330393533-443990a51d10?q=80&w=1000&auto=format&fit=crop" alt="Collector Hot Wheels" class="product-img">
+            </div>
+            <div class="product-info-box">
+                <h3>Collector's Hot Wheels</h3>
+                <p class="product-price">$45.00</p>
+                <button class="btn-buy">Add to Collection</button>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1581235720704-06d3acfcba8e?q=80&w=1000&auto=format&fit=crop" alt="1:18 Supercar" class="product-img">
+            </div>
+            <div class="product-info-box">
+                <h3>1:18 Precision Scale Model</h3>
+                <p class="product-price">$225.00</p>
+                <button class="btn-buy">Pre-Order Now</button>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1618123069754-cd64c210d167?q=80&w=1000&auto=format&fit=crop" alt="Vintage Racing Prints" class="product-img">
+            </div>
+            <div class="product-info-box">
+                <h3>Vintage Racing Print Set</h3>
+                <p class="product-price">$85.00</p>
+                <button class="btn-buy">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1549465220-1d8c9d9c6703?q=80&w=1000&auto=format&fit=crop" alt="Carbon Fiber Gear" class="product-img">
+            </div>
+            <div class="product-info-box">
+                <h3>Carbon Fiber Gear Set</h3>
+                <p class="product-price">$180.00</p>
+                <button class="btn-buy">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">GLAZE & GEAR</div>
+        <p>&copy; 2026 GLAZE & GEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const body = document.body;
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                body.style.overflow = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>
