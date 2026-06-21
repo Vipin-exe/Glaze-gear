@@ -92,6 +92,7 @@
         nav.desktop-nav {
             display: flex;
             align-items: center;
+            gap: 2rem;
         }
 
         .cart-icon {
@@ -102,45 +103,59 @@
             text-decoration: none;
             color: inherit;
             position: relative;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .cart-icon:hover {
+            background: rgba(152, 32, 46, 0.1);
+        }
+
+        header.scrolled .cart-icon:hover,
+        header.menu-open .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .cart-count {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: -4px;
+            right: -4px;
             background: var(--burgundy);
             color: white;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(152,32,46,0.2);
         }
 
         header.scrolled .cart-count, header.menu-open .cart-count {
             background: white;
             color: var(--burgundy);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         nav.desktop-nav a {
             text-decoration: none;
             color: var(--burgundy);
-            margin-left: 2.5rem;
             font-weight: 600;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: var(--transition);
             position: relative;
+            padding: 0.5rem 0;
         }
 
         nav.desktop-nav a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: 0;
             left: 0;
             width: 0;
             height: 2px;
@@ -148,7 +163,8 @@
             transition: var(--transition);
         }
 
-        nav.desktop-nav a:hover::after {
+        nav.desktop-nav a:hover::after,
+        nav.desktop-nav a.active::after {
             width: 100%;
         }
 
@@ -529,6 +545,17 @@
             body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
         });
 
+        // Active link detection
+        function setActiveLinks() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('nav.desktop-nav a, nav.mobile-nav a').forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (linkPath && currentPath.includes(linkPath)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
         // Close menu when clicking a link
         document.querySelectorAll('.mobile-nav a').forEach(link => {
             link.addEventListener('click', () => {
@@ -538,6 +565,10 @@
                 body.style.overflow = 'auto';
             });
         });
+
+        // Initialize
+        updateCartCount();
+        setActiveLinks();
     </script>
 </body>
 </html>
